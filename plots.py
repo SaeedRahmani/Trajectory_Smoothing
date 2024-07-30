@@ -107,9 +107,13 @@ follower_v_smooth_lp = robust_low_pass_filter(follower_v, cutoff=0.5, fs=10.0, o
 # Plotting the original and smoothed data
 plt.figure(figsize=(10, 6))
 
-# Plot original and smoothed data
-plt.plot(leader_t, leader_v, label='Original Leader Trajectory', color='skyblue', alpha=1)
-plt.plot(follower_t, follower_v, label='Original Follower Trajectory', color='lightcoral', alpha=1)
+# Plot original data with scatter and line
+plt.scatter(leader_t, leader_v, label='Original Leader Data Points', color='skyblue', s=10, alpha=0.8)
+plt.plot(leader_t, leader_v, color='skyblue', alpha=0.5)
+plt.scatter(follower_t, follower_v, label='Original Follower Data Points', color='lightcoral', s=10, alpha=0.8)
+plt.plot(follower_t, follower_v, color='lightcoral', alpha=0.5)
+
+# Plot smoothed data
 plt.plot(leader_t, leader_v_smooth_lp, label='Smoothed Leader Trajectory (LPF)', color='blue', linewidth=2)
 plt.plot(follower_t, follower_v_smooth_lp, label='Smoothed Follower Trajectory (LPF)', color='red', linewidth=2)
 
@@ -119,4 +123,3 @@ plt.title('Leader and Follower Trajectories Over Time (Robust Low Pass Filter)')
 plt.legend()
 plt.grid(True)
 plt.show()
-
