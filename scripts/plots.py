@@ -71,13 +71,28 @@ import scipy.signal
 from scipy.signal import butter, filtfilt
 
 # Function to remove outliers
-def remove_outliers(data, jump_threshold=10):
+# def remove_outliers(data, jump_threshold=10):
+#     smoothed_data = data.copy()
+#     for i in range(1, len(smoothed_data) - 2):
+#         if abs(smoothed_data[i] - smoothed_data[i-1]) > jump_threshold and \
+#            abs(smoothed_data[i] - smoothed_data[i+2]) > jump_threshold:
+#             smoothed_data[i] = (smoothed_data[i-1] + smoothed_data[i+2]) / 2
+#     return smoothed_data
+def remove_outliers(data, jump_threshold=2, offset:int=10):
     smoothed_data = data.copy()
+
+    # remove the jumps in the beginning of speed profile
+    for index in [4,3,2,1,0]:
+        if abs(smoothed_data[index] - smoothed_data[index: index + offset].mean()) > jump_threshold:
+            smoothed_data[index] = smoothed_data[index: index + offset].mean()
+
+    # remove the jumps in the middle of speed profile
     for i in range(1, len(smoothed_data) - 2):
         if abs(smoothed_data[i] - smoothed_data[i-1]) > jump_threshold and \
            abs(smoothed_data[i] - smoothed_data[i+2]) > jump_threshold:
             smoothed_data[i] = (smoothed_data[i-1] + smoothed_data[i+2]) / 2
     return smoothed_data
+
 
 # Load the pickle file
 file_path = './data/lyft_all.pkl'
@@ -108,9 +123,9 @@ follower_v_smooth_lp = robust_low_pass_filter(follower_v, cutoff=0.5, fs=10.0, o
 plt.figure(figsize=(10, 6))
 
 # Plot original data with scatter and line
-plt.scatter(leader_t, leader_v, label='Original Leader Data Points', color='skyblue', s=10, alpha=0.8)
+plt.scatter(leader_t, leader_v, label='Original Leader Data Points', color='skyblue', s=10, alpha=1)
 plt.plot(leader_t, leader_v, color='skyblue', alpha=0.5)
-plt.scatter(follower_t, follower_v, label='Original Follower Data Points', color='lightcoral', s=10, alpha=0.8)
+plt.scatter(follower_t, follower_v, label='Original Follower Data Points', color='lightcoral', s=10, alpha=1)
 plt.plot(follower_t, follower_v, color='lightcoral', alpha=0.5)
 
 # Plot smoothed data
