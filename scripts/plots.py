@@ -80,7 +80,7 @@ def remove_outliers(data, jump_threshold=10):
     return smoothed_data
 
 # Load the pickle file
-file_path = '/Users/srahmani/Downloads/lyft_all.pkl'
+file_path = './data/lyft_all.pkl'
 with open(file_path, 'rb') as file:
     data = pickle.load(file)
 
