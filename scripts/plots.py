@@ -95,14 +95,14 @@ def remove_outliers(data, jump_threshold=2, offset:int=10):
 
 
 # Load the pickle file
-file_path = '../data/lyft_all.pkl'
+file_path = '../data/waymo_all.pkl'
 with open(file_path, 'rb') as file:
     data = pickle.load(file)
 
 ## ID Selection
 random_number = random.randint(0, len(data)) # If you want to select a random trajectory
 print(random_number)
-random_number = 803 # If you want to select a specific trajectory
+random_number = 315 # If you want to select a specific trajectory
 # Trajectory Selection
 random_pair = data[random_number]
 leader_v = random_pair['leader_v']
@@ -127,9 +127,9 @@ follower_v_smooth_lp = robust_low_pass_filter(follower_v, cutoff=0.5, fs=10.0, o
 plt.figure(figsize=(10, 6))
 
 # Plot original data with scatter and line
-plt.scatter(leader_t, leader_v, label='Original Leader Data Points', color='blue', s=10, alpha=1)
+plt.scatter(leader_t, leader_v, label='Leader - Raw', color='blue', s=10, alpha=1)
 # plt.plot(leader_t, leader_v, color='skyblue', alpha=0.5)
-plt.scatter(follower_t, follower_v, label='Original Follower Data Points', color='red', s=10, alpha=1)
+plt.scatter(follower_t, follower_v, label='Follower - Raw', color='red', s=10, alpha=1)
 # plt.plot(follower_t, follower_v, color='lightcoral', alpha=0.5)
 
 # Plot smoothed data
@@ -148,19 +148,21 @@ plt.show()
 plt.figure(figsize=(10, 6))
 
 # Plot original data with scatter and line
-plt.scatter(leader_t, leader_v, label='Original Leader Data Points', color='skyblue', s=10, alpha=1)
+plt.scatter(leader_t, leader_v, label='Leader - Raw', color='skyblue', s=10, alpha=1)
 plt.plot(leader_t, leader_v, color='skyblue', alpha=0.5)
-plt.scatter(follower_t, follower_v, label='Original Follower Data Points', color='lightcoral', s=10, alpha=1)
+plt.scatter(follower_t, follower_v, label='Follower - Raw', color='lightcoral', s=10, alpha=1)
 plt.plot(follower_t, follower_v, color='lightcoral', alpha=0.5)
 
 # Plot smoothed data
-plt.plot(leader_t, leader_v_smooth_lp, label='Smoothed Leader Trajectory (LPF)', color='blue', linewidth=2)
-plt.plot(follower_t, follower_v_smooth_lp, label='Smoothed Follower Trajectory (LPF)', color='red', linewidth=2)
+plt.plot(leader_t, leader_v_smooth_lp, label='Leader - Smoothed (LPF)', color='blue', linewidth=2)
+plt.plot(follower_t, follower_v_smooth_lp, label='Follower - Smoothed (LPF)', color='red', linewidth=2)
 
-plt.xlabel('Time (s)')
-plt.ylabel('Speed (m/s)')
-plt.title('Leader and Follower Trajectories Over Time (Robust Low Pass Filter)')
+plt.xlabel('Time (s)', fontsize=18)
+plt.ylabel('Speed (m/s)', fontsize=18)
+plt.title('Leader and Follower Trajectories', fontsize=20)
 plt.legend()
+plt.xticks(fontsize=18)
+plt.yticks(fontsize=18)
 plt.grid(True)
 plt.show()
 
